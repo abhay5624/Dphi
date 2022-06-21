@@ -77,6 +77,7 @@ function App() {
             path="/createchallange"
             element={
               <CreateChallenge
+                data={Challenge}
                 setnewChallenge={setnewChallenge}
                 Editchllg={Editchllg}
                 setEditchllg={setEditchllg}

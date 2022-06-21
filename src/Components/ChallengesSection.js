@@ -112,16 +112,16 @@ export const ChallengesSection = ({
         });
         setChalleneData(uniqueChars);
       } else {
-        setChalleneData(ChalleneData);
+        setChalleneData(Editchllg);
       }
     } else {
-      let array = ChalleneData;
+      let array = data;
       if (filter[0]) {
         let array3 = [];
         await filter.forEach((element) => {
           let array2;
           if (element.FilterName === "Everything") {
-            array3 = ChalleneData;
+            array3 = data;
           } else if (element.FilterName === "Level") {
             array2 = array.filter((x) => {
               return x.Tag == element.Filter;
@@ -140,7 +140,7 @@ export const ChallengesSection = ({
         });
         setChalleneData(uniqueChars);
       } else {
-        setChalleneData(ChalleneData);
+        setChalleneData(data);
       }
     }
   };

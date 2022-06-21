@@ -5,7 +5,12 @@ import imageIcon from "../assets/icons/bi_image-fill.svg";
 import RightIcon from "../assets/icons/Rightarrow.svg";
 import CalIcon from "../assets/icons/uil_calender.svg";
 import { useNavigate } from "react-router";
-const CreateChallenge = ({ setnewChallenge, Editchllg, setEditchllg }) => {
+const CreateChallenge = ({
+  data,
+  setnewChallenge,
+  Editchllg,
+  setEditchllg,
+}) => {
   const navigate = useNavigate();
   const first = useRef();
   const [Image, setImage] = useState(false);
@@ -107,6 +112,10 @@ const CreateChallenge = ({ setnewChallenge, Editchllg, setEditchllg }) => {
           console.log(value);
           setnewChallenge([...Editchllg, value]);
           setEditchllg([...Editchllg, value]);
+          navigate("/");
+        } else {
+          setnewChallenge([...data, value]);
+          setEditchllg([...data, value]);
           navigate("/");
         }
       })
