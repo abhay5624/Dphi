@@ -15,7 +15,7 @@ const CreateChallenge = ({
   const first = useRef();
   const [Image, setImage] = useState(false);
   const [isCorrectFormat, setIsCorrectFormat] = useState(true);
-
+  const [formValidate, setFormValidate] = useState(true);
   var mL = [
     "January",
     "February",
@@ -30,6 +30,17 @@ const CreateChallenge = ({
     "November",
     "December",
   ];
+  const FormValidationHandler = (e) => {
+    if (e[0].value) {
+      if (e[3].value) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  };
   const RemoveImageHandler = () => {
     first.current.src = Icon;
     first.current.parentElement.className = "uploadText";
@@ -74,62 +85,76 @@ const CreateChallenge = ({
       isAm: isAm,
     };
   };
-  const createChallengeHandler = (e) => {
+  const createChallengeHandler = async (e) => {
     e.preventDefault();
     const array = [...e.target.form.elements];
-    const Startdate = dateobj(array[1].value);
-    const Enddate = dateobj(array[2].value);
-    const image = first.current.src;
-    const myPromise = new Promise((resolve, reject) => {
-      const editedcllg = {
-        id: Math.random(),
-        img: image,
-        Tag: array[4].value,
-        Title: array[0].value,
-        StartIn: {
-          Day: Startdate.Day,
-          Month: Startdate.Month,
-          Year: Startdate.Year,
-          Time: Startdate.Hour,
-        },
-        EndIn: {
-          Day: Enddate.Day,
-          Month: Enddate.Month,
-          Year: Enddate.Year,
-          Time: Enddate.Hour,
-        },
-        descpibtin: array[3].value,
-        overview: [
-          ` Lorem ipsum dolor, sit amet consectetur adipisicing elit. Debitis incidunt esse magnam dolorem, alias dolores unde ex veritatis animi mollitia temporibus porro. Blanditiis similique neque quos perferendis tempora accusamus sit!`,
-          `      Lorem ipsum dolor, sit amet consectetur adipisicing elit. Debitis incidunt esse magnam dolorem, alias dolores unde ex veritatis animi mollitia temporibus porro. Blanditiis similique neque quos perferendis tempora accusamus sit!`,
-          `      Lorem ipsum dolor, sit amet consectetur adipisicing elit. Debitis incidunt esse magnam dolorem, alias dolores unde ex veritatis animi mollitia temporibus porro. Blanditiis similique neque quos perferendis tempora accusamus sit`,
-        ],
-      };
-      console.log(editedcllg);
-      resolve(editedcllg);
+    const isvalid = new Promise((resolve, reject) => {
+      const checkValid = FormValidationHandler(array);
+      resolve(checkValid);
     });
-    myPromise
-      .then((value) => {
-        if (Editchllg) {
-          console.log(value);
-          setnewChallenge([...Editchllg, value]);
-          setEditchllg([...Editchllg, value]);
-          navigate("/");
-        } else {
-          setnewChallenge([...data, value]);
-          setEditchllg([...data, value]);
-          navigate("/");
-        }
-      })
-      .catch((e) => {
-        console.log(e);
-      });
+    isvalid.then((valid) => {
+      setFormValidate(valid);
+      if (valid) {
+        const Startdate = dateobj(array[1].value);
+        const Enddate = dateobj(array[2].value);
+        const image = first.current.src;
+        const myPromise = new Promise((resolve, reject) => {
+          const editedcllg = {
+            id: Math.random(),
+            img: image,
+            Tag: array[4].value,
+            Title: array[0].value,
+            StartIn: {
+              Day: Startdate.Day,
+              Month: Startdate.Month,
+              Year: Startdate.Year,
+              Time: Startdate.Hour,
+            },
+            EndIn: {
+              Day: Enddate.Day,
+              Month: Enddate.Month,
+              Year: Enddate.Year,
+              Time: Enddate.Hour,
+            },
+            descpibtin: array[3].value,
+            overview: [
+              ` Lorem ipsum dolor, sit amet consectetur adipisicing elit. Debitis incidunt esse magnam dolorem, alias dolores unde ex veritatis animi mollitia temporibus porro. Blanditiis similique neque quos perferendis tempora accusamus sit!`,
+              `      Lorem ipsum dolor, sit amet consectetur adipisicing elit. Debitis incidunt esse magnam dolorem, alias dolores unde ex veritatis animi mollitia temporibus porro. Blanditiis similique neque quos perferendis tempora accusamus sit!`,
+              `      Lorem ipsum dolor, sit amet consectetur adipisicing elit. Debitis incidunt esse magnam dolorem, alias dolores unde ex veritatis animi mollitia temporibus porro. Blanditiis similique neque quos perferendis tempora accusamus sit`,
+            ],
+          };
+          console.log(editedcllg);
+          resolve(editedcllg);
+        });
+        myPromise
+          .then((value) => {
+            if (Editchllg) {
+              console.log(value);
+              setnewChallenge([...Editchllg, value]);
+              setEditchllg([...Editchllg, value]);
+              navigate("/");
+            } else {
+              setnewChallenge([...data, value]);
+              setEditchllg([...data, value]);
+              navigate("/");
+            }
+          })
+          .catch((e) => {
+            console.log(e);
+          });
+      }
+    });
   };
   return (
     <div className="ChllgDetail">
       <div className="DetailHero">
         <h2>Challenge Details</h2>
       </div>
+      {!formValidate && (
+        <div className="Formwarning">
+          <h2>You have enter incorrect Data or not filled required criteria</h2>
+        </div>
+      )}
       <div className="DetailForm">
         <form>
           <p>Challenge Name</p>

@@ -575,3 +575,15 @@ label {
   border-radius: 5px;
   max-width: fit-content;
 }
+.Formwarning {
+  width: 80vw;
+  margin-left: 10vw;
+  color: #dc1414;
+  padding: 10px;
+  border: 2px #dc1414 solid;
+  border-radius: 3px;
+  text-align: center;
+  text-transform: uppercase;
+  margin-top: 3vw;
+  margin-bottom: 3vw;
+}
