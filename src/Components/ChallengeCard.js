@@ -5,6 +5,7 @@ import RightIcon from "../assets/icons/RightIcon.svg";
 const ChallengeCard = ({ data }) => {
   const starttime = data.StartIn;
   const endtime = data.EndIn;
+  const [isLeapYear, setIsLeapYear] = useState(false);
   const [remaining, setRemaining] = useState({
     RemainingDay: "loading",
     RemainingHours: "loading",
@@ -15,6 +16,8 @@ const ChallengeCard = ({ data }) => {
   const [am, setAm] = useState("AM");
   const [status, setStatus] = useState("Loading");
   const [isPast, setIspast] = useState(false);
+  const leapYear = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+  const NoneleapYear = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
   const getTimeHandler = () => {
     if (endtime.Time > 12) {
       setAm("PM");
@@ -45,10 +48,22 @@ const ChallengeCard = ({ data }) => {
     }
   };
   const setTimerHandler = () => {
+    const year = parseInt(`20` + starttime.Year);
+    if ((0 == year % 4 && 0 != year % 100) || 0 == year % 400) {
+      setIsLeapYear(true);
+    }
     if (status == "Upcoming") {
       const Today = new Date();
-
-      const RemainingDay = starttime.Day - Today.getDate();
+      let RemainingDay = starttime.Day - Today.getDate();
+      if (starttime.Month > Today.getMonth() + 1) {
+        if (isLeapYear === true) {
+          RemainingDay =
+            leapYear[Today.getMonth()] + starttime.Day - Today.getDate();
+        } else {
+          RemainingDay =
+            NoneleapYear[Today.getMonth()] + starttime.Day - Today.getDate();
+        }
+      }
       const RemainingMin = Today.getMinutes();
 
       if (Today.getHours() > starttime.Time) {
@@ -68,7 +83,16 @@ const ChallengeCard = ({ data }) => {
       }
     } else if (status == "Active") {
       const Today = new Date();
-      const RemainingDay = endtime.Day - Today.getDate();
+      let RemainingDay = endtime.Day - Today.getDate();
+      if (endtime.Month > Today.getMonth() + 1) {
+        if (isLeapYear === true) {
+          RemainingDay =
+            leapYear[Today.getMonth()] + endtime.Day - Today.getDate();
+        } else {
+          RemainingDay =
+            NoneleapYear[Today.getMonth()] + endtime.Day - Today.getDate();
+        }
+      }
       const RemainingMin = Today.getMinutes();
 
       if (Today.getHours() > endtime.Time) {
@@ -92,23 +116,28 @@ const ChallengeCard = ({ data }) => {
   const CheckDateHendler = () => {
     const CurrentDate = new Date();
 
-    if (data.StartIn.Month == CurrentDate.getMonth() + 1) {
-      if (data.StartIn.Day > CurrentDate.getDate()) {
-        setStatus("Upcoming");
-      } else if (data.StartIn.Day < CurrentDate.getDate()) {
-        if (data.EndIn.Day == CurrentDate.getDate()) {
-          setStatus("Active");
-        } else if (data.EndIn.Day > CurrentDate.getDate()) {
-          setStatus("Active");
-        } else if (data.EndIn.Day < CurrentDate.getDate()) {
-          setStatus("Past");
-        }
-      } else if (data.StartIn.Day == CurrentDate.getDate()) {
-        if (data.StartIn.Time >= CurrentDate.getHours()) {
+    if (data.StartIn.Month === CurrentDate.getMonth() + 1) {
+      if (data.EndIn.Month === CurrentDate.getMonth() + 1) {
+        if (data.StartIn.Day > CurrentDate.getDate()) {
           setStatus("Upcoming");
-        } else {
-          setStatus("Active");
+        } else if (data.StartIn.Day < CurrentDate.getDate()) {
+          if (data.EndIn.Day == CurrentDate.getDate()) {
+            setStatus("Active");
+          } else if (data.EndIn.Day > CurrentDate.getDate()) {
+            setStatus("Active");
+          } else if (data.EndIn.Day < CurrentDate.getDate()) {
+            setStatus("Past");
+          }
+        } else if (data.StartIn.Day == CurrentDate.getDate()) {
+          if (data.StartIn.Time >= CurrentDate.getHours()) {
+            setStatus("Upcoming");
+          } else {
+            setStatus("Active");
+          }
         }
+      }
+      if (data.EndIn.Month > CurrentDate.getMonth() + 1) {
+        setStatus("Active");
       }
     } else if (data.StartIn.Month > CurrentDate.getMonth() + 1) {
       setStatus("Upcoming");

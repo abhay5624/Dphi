@@ -14,6 +14,8 @@ const CreateChallenge = ({
   const navigate = useNavigate();
   const first = useRef();
   const [Image, setImage] = useState(false);
+  const [isCorrectFormat, setIsCorrectFormat] = useState(true);
+
   var mL = [
     "January",
     "February",
@@ -131,18 +133,34 @@ const CreateChallenge = ({
       <div className="DetailForm">
         <form>
           <p>Challenge Name</p>
-          <input type="text" name="ChallName" id="ChallName" />
+          <input type="text" name="ChallName" id="ChallName" required />
           <p>Start Date</p>
+          {!isCorrectFormat && (
+            <div className="warn">
+              Date Format ,<span>Example: 18th July'22 4:00 Pm</span>
+            </div>
+          )}
           <label htmlFor="StartDate">
             <img src={CalIcon} alt="Icon" />
           </label>
+
           <input
             type="text"
             name="StartDate"
             id="StartDate"
             placeholder="Add Start Date"
+            onClick={() => {
+              setIsCorrectFormat(false);
+            }}
+            required
           />
           <p>End Date</p>
+          {!isCorrectFormat && (
+            <div className="warn">
+              Date Format ,<span>Example: 18th July'22 4:00 Pm</span>
+            </div>
+          )}
+
           <label htmlFor="EndDate">
             <img src={CalIcon} alt="Icon" />
           </label>
@@ -151,6 +169,10 @@ const CreateChallenge = ({
             name="EndDate"
             id="EndDate"
             placeholder="Add End Date"
+            required
+            onClick={() => {
+              setIsCorrectFormat(false);
+            }}
           />
           <p>Description</p>
           <textarea
@@ -158,6 +180,7 @@ const CreateChallenge = ({
             id="Description"
             cols="30"
             rows="10"
+            required
           ></textarea>
           <div className="inputimage">
             <p>Image</p>
@@ -189,7 +212,7 @@ const CreateChallenge = ({
           </div>
 
           <p>Level</p>
-          <select name="level" id="level" defaultValue={"Easy"}>
+          <select name="level" id="level" defaultValue={"Easy"} required>
             <option value="Easy">Easy</option>
             <option value="Medium">Medium</option>
             <option value="Hard">Hard</option>

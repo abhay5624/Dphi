@@ -300,7 +300,11 @@ header img {
   margin-left: 10px;
   margin-right: 10px;
 }
+button {
+  cursor: pointer;
+}
 .ppt_ptn {
+  cursor: pointer;
   margin: 40px;
   background-color: #44924c;
   color: white;
@@ -339,6 +343,7 @@ header img {
   font-size: 18px;
 }
 .linksclass {
+  cursor: pointer;
   text-decoration: none;
 }
 .ChllgHero {
@@ -497,7 +502,7 @@ header img {
 }
 .Dropdown {
   max-width: 10vw;
-
+  cursor: pointer;
   font-family: "Inter", sans-serif;
 }
 
@@ -529,6 +534,7 @@ header img {
   display: flex;
   width: 60%;
   justify-content: space-evenly;
+  cursor: pointer;
 }
 .changeImage p {
   font-style: normal;
@@ -560,4 +566,12 @@ label {
   position: absolute;
   left: 30%;
   margin-top: 14px;
+}
+.warn {
+  color: #0fa958;
+  font-size: 12px;
+  padding: 0 5px;
+  border: 2px #0fa958 solid;
+  border-radius: 5px;
+  max-width: fit-content;
 }
